@@ -41,7 +41,6 @@ std::string GetFullProfilingInfo(const cl::Event &event, ProfilingResolution res
 }
 
 int main() {
-    std::vector<cl::Platform> platforms;
     // ------------------------------------------------------
     // TODO 1: Query all available OpenCL platforms, and
     // store your results in the "platforms" vector
@@ -74,7 +73,6 @@ int main() {
         std::cout << "\n========================================\n";
         std::cout << "Using platform: " << platformName << "\n";
 
-        std::vector<cl::Device> devices;
         //-----------------------------------------------
         // TODO 3: Get all devices for this platform and 
         // store in the vector called devices
@@ -184,10 +182,8 @@ int main() {
             event-->output event for synchronisation/profiling
             ----------------------------------------------------------------------------*/
             cl::Event prof_event;
-            queue.enqueueNDRangeKernel(kernel_add, cl::NullRange, cl::NDRange(devices), cl::NullRange, nullptr, &prof_event);
+            queue.enqueueNDRangeKernel(kernel_add, cl::NullRange, cl::NDRange(N, N), cl::NullRange, nullptr, &prof_event);
             queue.finish();
-            
-
 
 
             /*--------------------------------------------------------------------
@@ -195,10 +191,9 @@ int main() {
             "GetFullProfilingInfo". use getProfilingInfo<CL_PROFILING_COMMAND_START/END>()
             Then perform the calculations. note that getProfilingInfo returns cl_ulong data type
             -----------------------------------------------------------------------*/
-            
-
-            
-
+            std::cout << "Kernal execution time [ns]:" << prof_event.getProfilingInfo<CL_PROFILING_COMMAND_END>() - prof_event.getProfilingInfo<CL_PROFILING_COMMAND_START>() << std::endl;
+            double end = prof_event.getProfilingInfo<CL_PROFILING_COMMAND_END>();
+            double start = prof_event.getProfilingInfo<CL_PROFILING_COMMAND_START>();
             //----------------------------------------------------------------------
 
             double exec_ns = static_cast<double>(end - start);
@@ -211,7 +206,7 @@ int main() {
             TODO 8 [Optional]: Display detailed event breakdown using the 
             helper function "GetFullProfilingInfo"
             */ 
-
+            std::cout << GetFullProfilingInfo(prof_event, ProfilingResolution::PROF_US) << std::endl;
             
 
             /*
@@ -233,4 +228,5 @@ int main() {
     use the detailed profiling info to see how the total times compare to execution time alone?*/
     
     return 0;
+}
 }
