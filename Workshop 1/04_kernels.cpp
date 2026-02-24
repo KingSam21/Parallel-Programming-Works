@@ -23,7 +23,11 @@ entire file into a std::string, throws an error if the file
 cannot be opened, and returns the kernel source so it can be
 passed to cl::Program for runtime compilation.
 // -----------------------------------------------------------*/
-
+std::string LoadKernelSource(const std::string &filePath) {
+    std::ifstream file(filePath);
+    if (!file.is_open()) throw std::runtime_error("Cannot open kernel file: " + filePath);
+    return std::string(std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>());
+}
 
 
 
@@ -124,7 +128,7 @@ int main() {
             // Launch the kernel
             cl::Event event;
             
-            
+            cl::Kernel(program, "add"); 
 
 
             double event_time = GetEventExecutionTimeMS(event);
