@@ -61,7 +61,8 @@ int main()
     cl_float3 g;
     float dt;
     // initialize gravity vector and time step (dt) here
-    
+    g.x = 0.0f; g.y = -9.81f; g.z=0.0f;
+    dt = 0.01;
     
 
 
@@ -69,7 +70,11 @@ int main()
     // Set kernel arguments (match the order in gravity.cl)
     // - Remember to pass numParticles for bounds check in kernel!
     // use kernel.setArg() to set each argument (see OpenCL docs or examples)
-    
+    kernel.setArg(0, d_vel);
+    kernel.setArg(1, d_newVel);
+    kernel.setArg(2, g);
+    kernel.setArg(3, dt);
+    kernel.setArg(4, numParticles);
     
 
 
@@ -135,7 +140,6 @@ int main()
     TODO #4 (REPORT):Record the runtimes for AUTO and manual local sizes. 
     Identify the best configuration and explain why.
     */
-
 
     
 

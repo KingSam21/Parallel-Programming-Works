@@ -43,9 +43,9 @@ __kernel void apply_gravity(__global const float3* vel,
                             int numParticles)
 {
     // Complete the codes
-    
-
-
-
-    
+    int id = get_global_id(0);
+    if (id >= numParticles) return;
+    float3 v = vel[id];
+    float3 v_new = (float3)(v.x + g.x * dt, v.y + g.y * dt, v.z + g.z * dt);
+    newVel[id] = v_new;    
 }
