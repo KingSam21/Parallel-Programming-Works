@@ -23,11 +23,17 @@ IMPORTANT:
     - Use id < numParticles check for padded NDRange.
     - Avoid division by zero mass (we guarantee mass > 0 on host).
 ------------------------------------------------------------------*/
-__kernel void compute_accel(float3 force, float mass, __global float3* accel, int numParticles)
+__kernel void compute_accel(__global float3* force, __global float* mass, global float3* accel, int numParticles)
 {
     int id = get_global_id(0);
     if (id >= numParticles) return;
-    accel[id] = (float3)(force.x / mass, force.y / mass, force.z / mass);
+    
+    if (mass[id] > 0){
+        accel[id] = force[id] / mass[id];
+    }
+
+
+    
 }
 
 

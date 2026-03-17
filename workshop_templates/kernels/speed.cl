@@ -11,8 +11,15 @@ Output:
 Use bounds check id < numParticles to support padded NDRange.
 ------------------------------------------------------------------------*/
 
+__kernel void compute_speed(__global float3* vel, __global float* speed, int numParticles)
+{
+    int id = get_global_id(0);
+    if(id >= numParticles) return;
 
-
+    float3 v = vel[id];
+    float new_s = (float)(sqrt(v.x*v.x + v.y*v.y + v.z*v.z));
+    speed[id] = new_s; 
+}
 
 
 

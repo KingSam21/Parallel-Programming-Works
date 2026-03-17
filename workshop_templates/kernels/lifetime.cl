@@ -23,7 +23,16 @@ __kernel void update_lifetimes(__global const float* life,
                                float dt,
                                int numParticles)
 {
-    // Complete the codes]
+    // Complete the codes
+    int id = get_global_id(0);
+    if (id >= numParticles) return;
 
+    float remaining = life[id] - dt;
+    if (remaining > 0){
+        alive[id] = 1;
+    }
+    else{
+        alive[id] = 0;
+    }
     
 }
